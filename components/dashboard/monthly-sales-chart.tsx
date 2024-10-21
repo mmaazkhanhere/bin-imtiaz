@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, XAxis, YAxis } from "recharts"
 import {
     ChartConfig,
     ChartContainer,
@@ -13,8 +13,6 @@ import {
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"

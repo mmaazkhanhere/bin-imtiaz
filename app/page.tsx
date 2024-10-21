@@ -1,9 +1,9 @@
-import Image from "next/image";
+import DashboardUI from "@/components/dashboard/dashboard-ui";
 
 export default function Home() {
   return (
   <main >
-    Hello
+    <DashboardUI />
   </main>
   )
 }

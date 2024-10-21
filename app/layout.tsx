@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 
-import "./globals.css";
+import { Poppins } from "next/font/google";
 
+import "./globals.css";
+import Navbar from "@/components/navbar";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: "400"
+});
 
 export const metadata: Metadata = {
   title: "Al Farooq",
@@ -19,7 +26,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
+        className={`${poppins.className} px-4`}
         >
+          <Navbar />
           {children}
         </body>
       </html>

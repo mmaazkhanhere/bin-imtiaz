@@ -23,7 +23,7 @@ const TotalRevenueMetrics = ({heading, revenue, description}: Props) => {
                     <h2 className='text-sm font-medium'>{heading}</h2>
                     <DollarSign className='text-gray-500 w-4 h-4' />
                 </div>
-                <p className='text-2xl font-bold mt-2'>${revenue}</p>
+                <p className='text-2xl font-bold mt-2'>Rs{revenue}</p>
                 <p className='text-gray-400 text-xs'>{description}</p>
             </div>
         </CardContent>

@@ -38,8 +38,6 @@ const recentSales = [
         by: "Muhammed Ali",
         amount: 39.00,
     },
-    
-    
 ]
 
 const RecentSales = () => {

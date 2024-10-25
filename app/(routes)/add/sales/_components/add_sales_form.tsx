@@ -34,9 +34,10 @@ const formSchema = z.object({
     quantity: z.coerce.number(),
     price: z.coerce.number(),
     color: z.string(),
+    seller: z.string()
   })
 
-const AddInventoryForm = () => {
+const AddSalesForm = () => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -46,6 +47,7 @@ const AddInventoryForm = () => {
           quantity: 0,
           price: 0,
           color: "",
+          seller: "",
         },
       })
 
@@ -71,7 +73,7 @@ const AddInventoryForm = () => {
                                 <Input placeholder="e.g" {...field} />
                             </FormControl>
                             <FormDescription>
-                                Enter the name of the product you want to add to your inventory.
+                                Enter the name of the product you sold
                             </FormDescription>
                             <FormMessage />
                             </FormItem>
@@ -114,7 +116,7 @@ const AddInventoryForm = () => {
                                     <Input type='number' step='1' min={1} {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                    Enter the quantity of the product
+                                    Enter the quantity of the product you sold
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
@@ -156,13 +158,38 @@ const AddInventoryForm = () => {
                             </FormItem>
                         )}
                     />
+
+                    <FormField
+                        control={form.control}
+                        name="seller"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Seller</FormLabel>
+                            <Select onValueChange={field.onChange}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Who sold the product" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="Muhammed Ai">Muhammed Ali</SelectItem>
+                                    <SelectItem value="Noman Khan">Noman Khan</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormDescription>
+                                Who sold the product
+                            </FormDescription>
+                            <FormMessage />
+                            </FormItem>
+                    )}
+                    />
                 </div>
             </section>
             
-            <Button type="submit">Add Invetory</Button>
+            <Button type="submit">Add Sales</Button>
             </form>
         </Form>
   )
 }
 
-export default AddInventoryForm
+export default AddSalesForm

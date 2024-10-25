@@ -23,8 +23,8 @@ const NavigationItem = ({label, href}: Props) => {
   return (
     <button
     className={clsx(
-        'p-2 text-sm',
-        isActive ? "bg-white text-black rounded-lg font-semibold" : "text-gray-400 font-medium"
+        'p-2 text-sm font-medium',
+        isActive ? "bg-white text-black rounded-lg" : "text-gray-400 "
     )}
     onClick={handleNavigation}
     >

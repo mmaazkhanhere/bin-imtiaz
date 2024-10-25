@@ -52,7 +52,7 @@ const inventory: Inventory[] = [
     
 ]
 
-const InventoryPage = () => {
+const InventoryDetailsPage = () => {
   return (
     <div className='max-w-7xl mx-auto'>
         <h1 className='text-3xl font-semibold py-16 text-center'>Inventory Details</h1>
@@ -61,4 +61,4 @@ const InventoryPage = () => {
   )
 }
 
-export default InventoryPage
+export default InventoryDetailsPage

@@ -31,7 +31,7 @@ const formSchema = z.object({
       message: "Product name must be at least 4 characters.",
     }),
     category: z.string(),
-    quantity: z.coerce.number(),
+    stock: z.coerce.number(),
     price: z.coerce.number(),
     color: z.string(),
   })
@@ -43,7 +43,7 @@ const AddInventoryForm = () => {
         defaultValues: {
           productName: "",
           category: "",
-          quantity: 0,
+          stock: 0,
           price: 0,
           color: "",
         },
@@ -106,15 +106,15 @@ const AddInventoryForm = () => {
 
                     <FormField
                         control={form.control}
-                        name="quantity"
+                        name="stock"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Quantity</FormLabel>
+                                <FormLabel>Stock</FormLabel>
                                 <FormControl>
                                     <Input type='number' step='1' min={1} {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                    Enter the quantity of the product
+                                    Enter the totla stock of the product
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>

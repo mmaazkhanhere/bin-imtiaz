@@ -10,11 +10,7 @@ const Metrics = () => {
     <div className="grid grid-cols-4 gap-5 w-full">
       <TotalRevenueMetrics heading="Total Revenue" />
 
-      <TotalSalesMetrics
-        heading="Sales"
-        sales="12,234"
-        description="+20.1% from last month"
-      />
+      <TotalSalesMetrics heading="Total Sales" />
 
       <TopCategoryMetrics
         heading="Top Categroy"

@@ -6,7 +6,7 @@ import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 
-import { calculateRevenuePercentageChange } from "@/helpers/calculateRevenuePercentageChange";
+import { calculatePercentageChange } from "@/helpers/calculatePercentageChange";
 
 import { DollarSign } from "lucide-react";
 
@@ -29,7 +29,7 @@ const TotalRevenueMetrics = ({ heading }: Props) => {
         setCurrentRevenue(currentRevenue);
         setPreviousRevenue(previousRevenue);
 
-        const change = calculateRevenuePercentageChange(
+        const change = calculatePercentageChange(
           currentRevenue,
           previousRevenue
         );

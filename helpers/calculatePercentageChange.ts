@@ -1,4 +1,4 @@
-export function calculateRevenuePercentageChange(
+export function calculatePercentageChange(
   current: number,
   previous: number
 ): number | null {

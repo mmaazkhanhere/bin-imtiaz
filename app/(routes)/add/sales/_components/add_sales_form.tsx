@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import React from 'react'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import React, { useState, useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import axios from "axios";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -14,182 +15,219 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { useToast } from "@/hooks/use-toast";
+
+interface InventoryItem {
+  id: string;
+  productName: string;
+  category: string;
+}
 
 const formSchema = z.object({
-    productName: z.string().min(4, {
-      message: "Product name must be at least 4 characters.",
-    }),
-    category: z.string(),
-    quantity: z.coerce.number(),
-    price: z.coerce.number(),
-    color: z.string(),
-    seller: z.string()
-  })
+  inventoryId: z.string().min(1, "Please select an inventory item."),
+  quantity: z.coerce.number().min(1, "Quantity must be at least 1."),
+  price: z.coerce.number().min(0, "Price must be a positive number."),
+  seller: z.string().min(1, "Seller is required."),
+  color: z.string().min(1, "Color is required."),
+});
 
 const AddSalesForm = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      inventoryId: "",
+      quantity: 0,
+      price: 0,
+      seller: "",
+      color: "",
+    },
+  });
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-          productName: "",
-          category: "",
-          quantity: 0,
-          price: 0,
-          color: "",
-          seller: "",
-        },
-      })
+  const [loading, setLoading] = useState<boolean>(true);
+  const { toast } = useToast();
+  const [inventories, setInventories] = useState<InventoryItem[]>([]);
 
-      function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+  const { isSubmitting, isValid } = form.formState;
+
+  // Fetch inventory items on mount
+  useEffect(() => {
+    const fetchInventories = async () => {
+      try {
+        const response = await axios.get("/api/inventory");
+        setInventories(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching inventories:", err);
+        setLoading(false);
       }
+    };
+
+    fetchInventories();
+  }, []);
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response = await axios.post("/api/sales", values);
+
+      if (response.status === 200) {
+        form.reset(); // Reset form fields
+        toast({
+          title: "Sale added successfully",
+        });
+      } else {
+        toast({
+          title: "Something went wrong",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error adding sale:", error);
+      toast({
+        title: "Internal Server Error",
+        variant: "destructive",
+      });
+    }
+  }
+
+  if (loading) {
+    return <p>Loading inventory items...</p>;
+  }
 
   return (
     <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-5 max-w-2xl w-full mx-auto ">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-y-5 max-w-2xl w-full mx-auto "
+      >
+        <section className="flex gap-x-5 ">
+          <div className="flex flex-col space-y-8 w-full">
+            <FormField
+              control={form.control}
+              name="inventoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select product" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {inventories.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.productName} - {item.category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>
+                    Select the product you sold.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <section className='flex gap-x-5 '>
-                <div className='flex flex-col space-y-8 w-full'>
-                    <FormField
-                        control={form.control}
-                        name="productName"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Product Name</FormLabel>
-                            <FormControl>
-                                <Input placeholder="e.g" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                Enter the name of the product you sold
-                            </FormDescription>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantity</FormLabel>
+                  <FormControl>
+                    <Input type="number" step="1" min={1} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Enter the quantity of the product you sold
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                    <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Category</FormLabel>
-                            <Select onValueChange={field.onChange}>
-                                <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select category" />
-                                </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="Bukram">Bukram</SelectItem>
-                                    <SelectItem value="Fleese">Fleese</SelectItem>
-                                    <SelectItem value="2 in 1">2 in 1</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormDescription>
-                                Select the category to which your product belongs
-                            </FormDescription>
-                            <FormMessage />
-                            </FormItem>
-                    )}
-                    />
+            <FormField
+              control={form.control}
+              name="seller"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Seller</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Who sold the product" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Muhammed Ai">Muhammed Ali</SelectItem>
+                      <SelectItem value="Noman Khan">Noman Khan</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Who sold the product</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-                    <FormField
-                        control={form.control}
-                        name="quantity"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Quantity</FormLabel>
-                                <FormControl>
-                                    <Input type='number' step='1' min={1} {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Enter the quantity of the product you sold
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                
-                <div className='flex flex-col space-y-8 w-full'>
-                    <FormField
-                        control={form.control}
-                        name="price"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Unit Price</FormLabel>
-                                <FormControl>
-                                    <Input type='number' step='1' min={400} {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    What is the price of one product
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+          <div className="flex flex-col space-y-8 w-full">
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Unit Price</FormLabel>
+                  <FormControl>
+                    <Input type="number" step="1" min={400} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    What is the price of one product
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                    <FormField
-                        control={form.control}
-                        name="color"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Color of Product</FormLabel>
-                                <FormControl>
-                                    <Input type='text' placeholder="Black" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    What is the color of product
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color of Product</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="Black" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    What is the color of product
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </section>
 
-                    <FormField
-                        control={form.control}
-                        name="seller"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Seller</FormLabel>
-                            <Select onValueChange={field.onChange}>
-                                <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Who sold the product" />
-                                </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="Muhammed Ai">Muhammed Ali</SelectItem>
-                                    <SelectItem value="Noman Khan">Noman Khan</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormDescription>
-                                Who sold the product
-                            </FormDescription>
-                            <FormMessage />
-                            </FormItem>
-                    )}
-                    />
-                </div>
-            </section>
-            
-            <Button type="submit">Add Sales</Button>
-            </form>
-        </Form>
-  )
-}
+        <Button disabled={isSubmitting || !isValid} type="submit">
+          Add Sales
+        </Button>
+      </form>
+    </Form>
+  );
+};
 
-export default AddSalesForm
+export default AddSalesForm;

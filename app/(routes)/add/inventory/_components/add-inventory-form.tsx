@@ -40,7 +40,7 @@ const formSchema = z.object({
 
 const AddInventoryForm = () => {
   const { toast } = useToast();
-  const { router } = useRouter();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -3,6 +3,23 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { isAdmin } from "@/helpers/user-check";
 
+export const GET = async (request: NextRequest) => {
+  const user = auth();
+  const authorized = isAdmin(user.userId as string);
+
+  try {
+    if (!user.userId || !authorized) {
+      return new NextResponse("Not Authorized", { status: 401 });
+    }
+
+    const inventory = await prismadb.inventory.findMany();
+
+    return NextResponse.json(inventory);
+  } catch (error) {
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+};
+
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
   const user = auth();

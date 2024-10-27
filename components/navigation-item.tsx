@@ -14,7 +14,7 @@ const NavigationItem = ({label, href}: Props) => {
    const pathname = usePathname();
    const router = useRouter();
 
-   const isActive = pathname.includes(href);
+   const isActive = pathname === href
 
    const handleNavigation = () => {
      router.push(href);

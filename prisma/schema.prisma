@@ -19,3 +19,39 @@ model User{
   emailAddress String @unique
   createdAt DateTime @default(now())
 }
+
+model Inventory{
+  id String @id @default(uuid())
+  productName String
+  category String
+  totalStock Int
+  stockAvailable Int
+  price Float
+  color String
+  sales Sales[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sales {
+  id String @id @default(uuid())
+  productName  String
+  category     String
+  quantity     Int
+  price        Float
+  seller       String
+  color        String
+  date         DateTime @default(now())
+  inventory    Inventory @relation(fields: [inventoryId], references: [id])
+  inventoryId  String
+}
+
+model MonthlyMetrics {
+  id           Int      @id @default(autoincrement())
+  month        String
+  totalRevenue Float
+  totalSales   Int
+  createdAt    DateTime @default(now())
+
+  @@unique([month])
+}

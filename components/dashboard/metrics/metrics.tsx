@@ -3,7 +3,7 @@ import React from "react";
 import TotalRevenueMetrics from "./total-revenue-metrics";
 import TotalSalesMetrics from "./total-sales";
 import TopCategoryMetrics from "./top-category-metrics";
-import InventoryLevelMetrics from "./inventory-level-metrics";
+import TotalProfitMetrics from "./total-profit-metrics";
 
 const Metrics = () => {
   return (
@@ -12,17 +12,9 @@ const Metrics = () => {
 
       <TotalSalesMetrics heading="Total Sales" />
 
-      <TopCategoryMetrics
-        heading="Top Categroy"
-        category="Fleece"
-        description="100 items sold last month"
-      />
+      <TotalProfitMetrics heading="Total Profit" />
 
-      <InventoryLevelMetrics
-        heading="Inventory Level"
-        items="500"
-        description="Refill your inventory"
-      />
+      <TopCategoryMetrics heading="Top Categroy" />
     </div>
   );
 };

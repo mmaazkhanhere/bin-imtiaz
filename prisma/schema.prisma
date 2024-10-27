@@ -39,6 +39,7 @@ model Sales {
   category     String
   quantity     Int
   price        Float
+  profit       Float
   seller       String
   color        String
   date         DateTime @default(now())
@@ -51,6 +52,7 @@ model MonthlyMetrics {
   month        String
   totalRevenue Float
   totalSales   Int
+  totalProfit Float
   createdAt    DateTime @default(now())
 
   @@unique([month])

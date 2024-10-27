@@ -1,26 +1,9 @@
-// File: /app/api/sales/route.ts
+// /app/api/sales/route.ts
 
 import { NextResponse, NextRequest } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { isAdmin } from "@/helpers/user-check";
-
-export const GET = async () => {
-  try {
-    const { userId } = auth();
-    const authorized = userId ? isAdmin(userId) : false;
-
-    if (!userId || !authorized) {
-      return new NextResponse("Not Authorized", { status: 401 });
-    }
-
-    const sales = await prismadb.sales.findMany();
-    return NextResponse.json(sales);
-  } catch (error) {
-    console.error("Error fetching sales:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
-};
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
@@ -44,7 +27,7 @@ export const POST = async (request: NextRequest) => {
       return new NextResponse("Missing or Invalid Data", { status: 400 });
     }
 
-    // Verify that the inventory item exists
+    // Fetch the inventory item to get the cost
     const inventoryItem = await prismadb.inventory.findUnique({
       where: { id: inventoryId },
     });
@@ -53,10 +36,12 @@ export const POST = async (request: NextRequest) => {
       return new NextResponse("Inventory item not found", { status: 404 });
     }
 
-    // Check if there is enough stock available
-    if (inventoryItem.stockAvailable < quantity) {
-      return new NextResponse("Insufficient stock available", { status: 400 });
+    if (quantity > inventoryItem.stockAvailable) {
+      return new NextResponse("Not enough stock available", { status: 405 });
     }
+
+    // Calculate profit
+    const profit = (price - inventoryItem.price) * quantity;
 
     // Create the sale
     const sale = await prismadb.sales.create({
@@ -68,10 +53,10 @@ export const POST = async (request: NextRequest) => {
         seller,
         color,
         inventoryId,
+        profit,
       },
     });
 
-    // Update the inventory's stockAvailable
     await prismadb.inventory.update({
       where: { id: inventoryId },
       data: {
@@ -79,28 +64,39 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    // Determine the current month
-    const currentMonth = new Date().toLocaleString("default", {
-      month: "long",
-    });
+    // Determine the current month in 'YYYY-MM' format
+    const currentMonth = new Date().toISOString().slice(0, 7); // e.g., '2024-05'
 
     // Update MonthlyMetrics
-    await prismadb.monthlyMetrics.upsert({
+    const existingMetrics = await prismadb.monthlyMetrics.findUnique({
       where: { month: currentMonth },
-      update: {
-        totalRevenue: { increment: price * quantity },
-        totalSales: { increment: quantity },
-      },
-      create: {
-        month: currentMonth,
-        totalRevenue: price * quantity,
-        totalSales: quantity,
-      },
     });
+
+    if (existingMetrics) {
+      // Update existing metrics
+      await prismadb.monthlyMetrics.update({
+        where: { month: currentMonth },
+        data: {
+          totalRevenue: existingMetrics.totalRevenue + price * quantity,
+          totalSales: existingMetrics.totalSales + quantity,
+          totalProfit: existingMetrics.totalProfit + profit,
+        },
+      });
+    } else {
+      // Create new metrics for the current month
+      await prismadb.monthlyMetrics.create({
+        data: {
+          month: currentMonth,
+          totalRevenue: price * quantity,
+          totalSales: quantity,
+          totalProfit: profit,
+        },
+      });
+    }
 
     return NextResponse.json(sale);
   } catch (error) {
-    console.error("Error creating sale:", error);
+    console.error("[SALE_CREATION_ERROR]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };

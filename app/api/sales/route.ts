@@ -5,6 +5,23 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { isAdmin } from "@/helpers/user-check";
 
+export const GET = async () => {
+  try {
+    const { userId } = auth();
+    const authorized = userId ? isAdmin(userId) : false;
+
+    if (!userId || !authorized) {
+      return new NextResponse("Not Authorized", { status: 401 });
+    }
+
+    const sales = await prismadb.sales.findMany();
+    return NextResponse.json(sales);
+  } catch (error) {
+    console.error("Error fetching sales:", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+};
+
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
   const { userId } = auth();

@@ -1,79 +1,101 @@
-"use client"
+"use client";
 
-import React from 'react'
+import React, { useState, useEffect } from "react";
 
-import { Bar, BarChart, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-  } from "@/components/ui/chart"
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "../ui/skeleton";
 
 const MonthlySalesChart = () => {
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const chartData = [
-        { month: "January", sales: 45000},
-        { month: "February", sales: 60000},
-        { month: "March", sales: 22000},
-        { month: "April", sales: 43000 },
-        { month: "May", sales: 19000},
-        { month: "June", sales: 21000},
-        { month: "July", sales: 33000},
-        { month: "August", sales: 28000},
-        { month: "September", sales: 41000},
-        { month: "October", sales: 27000},
-        { month: "November", sales: 26500},
-        { month: "December", sales: 14000},
-      ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/chart");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        setChartData(data);
+      } catch (err) {
+        console.error("Failed to fetch chart data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      const chartConfig = {
-        sales: {
-          label: "Sales",
-          color: "#2563eb",
-        },
-      } satisfies ChartConfig
-      
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Monthly Sales</CardTitle>
+          <CardContent className="min-h-[200px] w-full h-full pt-6">
+            <div className="flex flex-col justify-center space-y-3">
+              <Skeleton className="h-[180px] w-[300px] rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-6 w-[250px]" />
+                <Skeleton className="h-6 w-[200px]" />
+                <Skeleton className="h-6 w-[250px]" />
+                <Skeleton className="h-6 w-[200px]" />
+              </div>
+            </div>
+          </CardContent>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  console.log(chartData);
+
+  const chartConfig = {
+    sales: {
+      label: "Sales",
+      color: "#2563eb",
+    },
+  } satisfies ChartConfig;
 
   return (
     <Card>
-        <CardHeader>
-            <CardTitle>Monthly Sales</CardTitle>
-            <CardContent className='pt-4'>
-                <ChartContainer config={chartConfig} className='w-full min-h-[200px]'>
-                    <BarChart accessibilityLayer data={chartData}>
-                        <XAxis
-                            dataKey="month"
-                            tickLine={false}
-                            tickMargin={10}
-                            axisLine={false}
-                            tickFormatter={(value) => value.slice(0, 3)}
-                        />
-                        <YAxis
-                            dataKey="sales"
-                            tickLine={true}
-                            tickMargin={10}
-                            axisLine={false}
-                        />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
-                        />
-                        <Bar dataKey="sales" fill="#000" radius={4} />
-                    </BarChart>
-                </ChartContainer>
-            </CardContent>
-        </CardHeader>
+      <CardHeader>
+        <CardTitle>Monthly Sales</CardTitle>
+        <CardContent className="pt-4">
+          <ChartContainer config={chartConfig} className="w-full min-h-[200px]">
+            <BarChart accessibilityLayer data={chartData}>
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <YAxis
+                dataKey="sales"
+                tickLine={true}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="sales" fill="#000" radius={4} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+      </CardHeader>
     </Card>
-    
-  )
-}
+  );
+};
 
-export default MonthlySalesChart
+export default MonthlySalesChart;

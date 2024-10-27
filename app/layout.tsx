@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 
+import Navbar from "@/components/navbar";
+import { Toaster } from "@/components/ui/toaster";
+
 import { Poppins } from "next/font/google";
 
 import "./globals.css";
-import Navbar from "@/components/navbar";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: "400"
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -21,15 +23,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <ClerkProvider>
       <html lang="en">
-        <body
-        className={`${poppins.className} px-4`}
-        >
+        <body className={`${poppins.className} px-4`}>
           <Navbar />
           {children}
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

@@ -43,12 +43,12 @@ const MonthlySalesChart = () => {
           <CardTitle>Monthly Sales</CardTitle>
           <CardContent className="min-h-[200px] w-full h-full pt-6">
             <div className="flex flex-col justify-center space-y-3">
-              <Skeleton className="h-[180px] w-[300px] rounded-xl" />
+              <Skeleton className="h-[180px] w-[400px] rounded-xl" />
               <div className="space-y-2">
-                <Skeleton className="h-6 w-[250px]" />
-                <Skeleton className="h-6 w-[200px]" />
-                <Skeleton className="h-6 w-[250px]" />
-                <Skeleton className="h-6 w-[200px]" />
+                <Skeleton className="h-6 w-[450px]" />
+                <Skeleton className="h-6 w-[400px]" />
+                <Skeleton className="h-6 w-[450px]" />
+                <Skeleton className="h-6 w-[400px]" />
               </div>
             </div>
           </CardContent>

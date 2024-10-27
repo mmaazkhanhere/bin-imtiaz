@@ -48,9 +48,15 @@ const TotalRevenueMetrics = ({ heading }: Props) => {
     return (
       <Card>
         <CardContent>
-          <div className="flex flex-col items-center justify-center mt-5 gap-y-4">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
+          <div className="flex flex-col items-start justify-center w-full mt-5 gap-y-2">
+            <div className="flex items-center justify-between w-full">
+              <h2 className="text-sm font-medium">{heading}</h2>
+              <DollarSign className="text-gray-500 w-4 h-4" />
+            </div>
+            <div className="pt-1 w-full space-y-2">
+              <Skeleton className="h-3 w-full" />
+              <Skeleton className="h-3 w-full" />
+            </div>
           </div>
         </CardContent>
       </Card>

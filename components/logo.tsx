@@ -1,9 +1,19 @@
-import React from 'react'
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 const Logo = () => {
   return (
-    <div className='text-2xl md:text-3xl font-black uppercase'>Al~Farooq</div>
-  )
-}
+    <Link href="/">
+      <Image
+        src="/logo.jpg"
+        width={80}
+        height={80}
+        alt="logo"
+        className="rounded-full object-cover"
+      />
+    </Link>
+  );
+};
 
-export default Logo
+export default Logo;

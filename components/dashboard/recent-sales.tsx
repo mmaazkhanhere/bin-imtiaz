@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IRecentSales } from "@/types/interface";
+import { Skeleton } from "../ui/skeleton";
 
 const RecentSales = () => {
   const [recentSales, setRecentSales] = useState<IRecentSales[]>([]);
@@ -19,6 +20,27 @@ const RecentSales = () => {
     };
     fetchRecentSales();
   }, []);
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Monthly Sales</CardTitle>
+          <CardContent className="min-h-[200px] w-full h-full pt-6">
+            <div className="flex flex-col items-end justify-center space-y-3">
+              <Skeleton className="h-[180px] w-[400px] rounded-xl" />
+              <div className="space-y-2 flex flex-col items-end">
+                <Skeleton className="h-6 w-[450px]" />
+                <Skeleton className="h-6 w-[400px]" />
+                <Skeleton className="h-6 w-[450px]" />
+                <Skeleton className="h-6 w-[400px]" />
+              </div>
+            </div>
+          </CardContent>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card>

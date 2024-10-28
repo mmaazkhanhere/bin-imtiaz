@@ -21,8 +21,6 @@ const SalesDataTable = () => {
     fetchSales();
   }, []);
 
-  console.log(salesData);
-
   return (
     <div>
       <DataTable columns={columns} data={salesData} />

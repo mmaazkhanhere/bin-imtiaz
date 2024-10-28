@@ -1,8 +1,10 @@
 // /app/api/sales/route.ts
 
 import { NextResponse, NextRequest } from "next/server";
-import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
+
+import prismadb from "@/lib/prismadb";
+
 import { isAdmin } from "@/helpers/user-check";
 
 export const POST = async (request: NextRequest) => {

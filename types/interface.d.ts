@@ -8,6 +8,13 @@ export interface ITotalProfit {
   previousProfit: number;
 }
 
+export interface IRecentSales {
+  id: string;
+  productName: string;
+  price: number;
+  seller: string;
+}
+
 export interface Inventory {
   id: string;
   productName: string;

@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
 
 import { isAdmin } from "@/helpers/user-check";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
   const { userId } = auth();
   const authorized = userId ? isAdmin(userId) : false;
 

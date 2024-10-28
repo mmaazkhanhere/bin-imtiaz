@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { parse, format } from "date-fns";
 import { auth } from "@clerk/nextjs/server";
 

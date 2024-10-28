@@ -16,6 +16,7 @@ export const GET = async () => {
 
     return NextResponse.json(inventory);
   } catch (error) {
+    console.log("[INVENTORY_GET]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
@@ -49,6 +50,7 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.json(inventory);
   } catch (error) {
+    console.log("[INVENTORY_POST]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };

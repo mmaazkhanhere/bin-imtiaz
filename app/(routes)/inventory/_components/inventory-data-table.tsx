@@ -8,7 +8,7 @@ import { columns } from "./columns";
 
 const InventoryDataTable = () => {
   const [inventoryData, setInventoryData] = useState<Inventory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchInventory = async () => {

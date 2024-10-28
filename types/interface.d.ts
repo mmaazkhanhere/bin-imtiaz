@@ -29,6 +29,7 @@ export interface Sales {
   id: string;
   productName: string;
   price: number;
+  profit: number;
   quantity: number;
   seller: string;
   category: string;

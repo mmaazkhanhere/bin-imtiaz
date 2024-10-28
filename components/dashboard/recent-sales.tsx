@@ -5,39 +5,6 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IRecentSales } from "@/types/interface";
 
-const recentSales = [
-  {
-    id: 1,
-    item: "Fleece Cap Black Color",
-    by: "Muhammed Ali",
-    amount: 1999.0,
-  },
-  {
-    id: 2,
-    item: "Fleece Cap Black Color",
-    by: "Muhammed Ali",
-    amount: 39.0,
-  },
-  {
-    id: 3,
-    item: "Fleece Cap Black Color",
-    by: "Muhammed Ali",
-    amount: 299.0,
-  },
-  {
-    id: 4,
-    item: "Fleece Cap Black Color",
-    by: "Muhammed Ali",
-    amount: 990.0,
-  },
-  {
-    id: 5,
-    item: "Fleece Cap Black Color",
-    by: "Muhammed Ali",
-    amount: 39.0,
-  },
-];
-
 const RecentSales = () => {
   const [recentSales, setRecentSales] = useState<IRecentSales[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);

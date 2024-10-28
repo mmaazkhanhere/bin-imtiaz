@@ -1,11 +1,29 @@
-// /app/api/sales/route.ts
-
 import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
 
 import { isAdmin } from "@/helpers/user-check";
+
+export const GET = async () => {
+  const { userId } = auth();
+  const authorized = userId ? isAdmin(userId) : false;
+
+  try {
+    if (!userId || !authorized) {
+      return new NextResponse("Not Authorized", { status: 401 });
+    }
+
+    const sales = await prismadb.sales.findMany({
+      orderBy: { date: "desc" },
+    });
+
+    return NextResponse.json(sales);
+  } catch (error) {
+    console.error("Error fetching sales:", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+};
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();

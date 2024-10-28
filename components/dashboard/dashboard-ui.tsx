@@ -12,7 +12,7 @@ import { PlusIcon } from "lucide-react";
 const DashboardUI = async () => {
   return (
     <section className="flex flex-col">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full">
         <h1 className="py-8 text-2xl font-bold">Dashboard</h1>
 
         <div className="flex items-center gap-2">
@@ -34,11 +34,11 @@ const DashboardUI = async () => {
 
       <Metrics />
 
-      <div className="grid grid-cols-9 w-full pt-8 gap-x-8">
-        <div className="col-span-5 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-9 w-full py-8 gap-8 md:gap-8">
+        <div className="lg:col-span-5 w-full">
           <MonthlySalesChart />
         </div>
-        <div className="col-span-4 w-full">
+        <div className="lg:col-span-4 w-full">
           <RecentSales />
         </div>
       </div>

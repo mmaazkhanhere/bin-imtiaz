@@ -1,3 +1,8 @@
+export interface IMenu {
+  label: string;
+  href: string;
+}
+
 export interface ITopCategoryData {
   category: string;
   totalSold: number;

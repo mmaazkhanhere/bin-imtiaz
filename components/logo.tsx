@@ -10,7 +10,7 @@ const Logo = () => {
         width={80}
         height={80}
         alt="logo"
-        className="rounded-full object-cover"
+        className="rounded-full object-cover w-16 md:w-20 h-16 md:h-20"
       />
     </Link>
   );

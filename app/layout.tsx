@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${poppins.className} px-4`}>
+        <body className={`${poppins.className} px-2 md:px-4`}>
           <Navbar />
           {children}
           <Toaster />

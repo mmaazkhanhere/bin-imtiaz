@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
+
+import prismadb from "@/lib/prismadb";
+
 import { isAdmin } from "@/helpers/user-check";
 
 export const GET = async () => {

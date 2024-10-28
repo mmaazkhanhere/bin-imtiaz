@@ -1,23 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parse, format } from "date-fns";
+import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
 
-export const GET = async (request: NextRequest) => {
+import { isAdmin } from "@/helpers/user-check";
+
+export const GET = async () => {
   try {
-    // Fetch all monthly metrics, ordered by 'month' ascending
+    const { userId } = auth();
+    const authorized = isAdmin(userId as string);
+
+    if (!authorized) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const metrics = await prismadb.monthlyMetrics.findMany({
       orderBy: {
-        month: "asc", // Since 'month' is in 'YYYY-MM', string ordering works
+        month: "asc",
       },
     });
 
-    // Format the 'month' field from 'YYYY-MM' to 'MMM YYYY' (e.g., 'Oct 2024')
     const chartData = metrics.map((metric) => {
-      // Append '-01' to make it a valid date string (e.g., '2024-10-01')
       const date = parse(`${metric.month}-01`, "yyyy-MM-dd", new Date());
 
-      // Format the date to 'MMM YYYY' (e.g., 'Oct 2024')
       const formattedMonth = format(date, "MMM yyyy");
 
       return {

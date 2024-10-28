@@ -28,12 +28,12 @@ const RecentSales = () => {
           <CardTitle>Monthly Sales</CardTitle>
           <CardContent className="min-h-[200px] w-full h-full pt-6">
             <div className="flex flex-col items-end justify-center space-y-3">
-              <Skeleton className="h-[180px] w-[400px] rounded-xl" />
+              <Skeleton className="h-[100px] md:h-[180px] w-[250px] md:w-[400px] rounded-xl" />
               <div className="space-y-2 flex flex-col items-end">
-                <Skeleton className="h-6 w-[450px]" />
-                <Skeleton className="h-6 w-[400px]" />
-                <Skeleton className="h-6 w-[450px]" />
-                <Skeleton className="h-6 w-[400px]" />
+                <Skeleton className="h-4 md:h-6 w-[300px] md:w-[450px]" />
+                <Skeleton className="h-4 md:h-6 w-[250px] md:w-[400px]" />
+                <Skeleton className="h-4 md:h-6 w-[300px] md:w-[450px]" />
+                <Skeleton className="h-4 md:h-6 w-[250px] md:w-[400px]" />
               </div>
             </div>
           </CardContent>

@@ -11,7 +11,7 @@ const Home = () => {
   if (!authorized)
     return (
       <main>
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl font-bold pt-4">
           You are not authorized to view this page.
         </h1>
       </main>

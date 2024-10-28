@@ -3,7 +3,7 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { isAdmin } from "@/helpers/user-check";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
   const user = auth();
   const authorized = isAdmin(user.userId as string);
 

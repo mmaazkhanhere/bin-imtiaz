@@ -57,8 +57,6 @@ const MonthlySalesChart = () => {
     );
   }
 
-  console.log(chartData);
-
   const chartConfig = {
     sales: {
       label: "Sales",

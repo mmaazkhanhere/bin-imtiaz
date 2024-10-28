@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface InventoryItem {
   id: string;
@@ -60,7 +61,6 @@ const AddSalesForm = () => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  // Fetch inventory items on mount
   useEffect(() => {
     const fetchInventories = async () => {
       try {
@@ -101,7 +101,15 @@ const AddSalesForm = () => {
   }
 
   if (loading) {
-    return <p>Loading inventory items...</p>;
+    return (
+      <div className="flex flex-col justify-center space-y-3">
+        <Skeleton className="h-12 w-12 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-[450px]" />
+          <Skeleton className="h-3 w-[400px]" />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -110,7 +118,7 @@ const AddSalesForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-y-5 max-w-2xl w-full mx-auto "
       >
-        <section className="flex gap-x-5 ">
+        <section className="flex flex-col md:flex-row gap-x-5 ">
           <div className="flex flex-col space-y-8 w-full">
             <FormField
               control={form.control}
@@ -185,7 +193,7 @@ const AddSalesForm = () => {
             />
           </div>
 
-          <div className="flex flex-col space-y-8 w-full">
+          <div className="flex flex-col space-y-8 w-full pt-8 md:pt-0">
             <FormField
               control={form.control}
               name="price"

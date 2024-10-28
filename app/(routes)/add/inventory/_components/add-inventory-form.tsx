@@ -88,7 +88,7 @@ const AddInventoryForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-y-5 max-w-2xl w-full mx-auto "
       >
-        <section className="flex gap-x-5 ">
+        <section className="flex flex-col md:flex-row gap-x-5 ">
           <div className="flex flex-col space-y-8 w-full">
             <FormField
               control={form.control}
@@ -152,7 +152,7 @@ const AddInventoryForm = () => {
             />
           </div>
 
-          <div className="flex flex-col space-y-8 w-full">
+          <div className="flex flex-col space-y-8 w-full pt-8 md:pt-0">
             <FormField
               control={form.control}
               name="price"

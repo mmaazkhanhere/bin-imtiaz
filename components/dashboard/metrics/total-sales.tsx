@@ -16,7 +16,7 @@ type Props = {
 
 const TotalSalesMetrics = ({ heading }: Props) => {
   const [currentSales, setCurrentSales] = useState<number>(0);
-  const [previousSales, setPreviousSales] = useState<number>(0);
+  const [, setPreviousSales] = useState<number>(0);
   const [percentageChange, setPercentageChange] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 

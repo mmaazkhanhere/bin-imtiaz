@@ -26,6 +26,7 @@ model Inventory{
   category String
   totalStock Int
   stockAvailable Int
+  size Int
   price Float
   color String
   sales Sales[]
@@ -37,6 +38,7 @@ model Sales {
   id String @id @default(uuid())
   productName  String
   category     String
+  size Int
   quantity     Int
   price        Float
   profit       Float

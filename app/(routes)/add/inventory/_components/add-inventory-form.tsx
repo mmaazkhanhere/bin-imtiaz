@@ -34,6 +34,7 @@ const formSchema = z.object({
   }),
   category: z.string(),
   totalStock: z.coerce.number(),
+  size: z.coerce.number(),
   price: z.coerce.number(),
   color: z.string(),
 });
@@ -48,6 +49,7 @@ const AddInventoryForm = () => {
       productName: "",
       category: "",
       totalStock: 0,
+      size: 53,
       price: 0,
       color: "",
     },
@@ -95,13 +97,12 @@ const AddInventoryForm = () => {
               name="productName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product Name</FormLabel>
+                  <FormLabel>Cap Name</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Enter the name of the product you want to add to your
-                    inventory.
+                    Enter the name of the cap you want to add to your inventory.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -127,7 +128,7 @@ const AddInventoryForm = () => {
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Select the category to which your product belongs
+                    Select the category to which your cap belongs
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -144,7 +145,7 @@ const AddInventoryForm = () => {
                     <Input type="number" step="1" min={1} {...field} />
                   </FormControl>
                   <FormDescription>
-                    Enter the total stock of the product
+                    Enter the total stock of the cap
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -155,6 +156,34 @@ const AddInventoryForm = () => {
           <div className="flex flex-col space-y-8 w-full pt-8 md:pt-0">
             <FormField
               control={form.control}
+              name="size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size (cm)</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select size" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="53">53 cm</SelectItem>
+                      <SelectItem value="54">54 cm</SelectItem>
+                      <SelectItem value="55">55 cm</SelectItem>
+                      <SelectItem value="56">56 cm</SelectItem>
+                      <SelectItem value="57">57 cm</SelectItem>
+                      <SelectItem value="58">58 cm</SelectItem>
+                      <SelectItem value="59">59 cm</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select the size of the cap</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="price"
               render={({ field }) => (
                 <FormItem>
@@ -163,7 +192,7 @@ const AddInventoryForm = () => {
                     <Input type="number" step="1" min={400} {...field} />
                   </FormControl>
                   <FormDescription>
-                    What is the price of one product
+                    What is the price of one cap
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -175,13 +204,11 @@ const AddInventoryForm = () => {
               name="color"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Color of Product</FormLabel>
+                  <FormLabel>Color of Cap</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Black" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    What is the color of product
-                  </FormDescription>
+                  <FormDescription>What is the color of cap</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

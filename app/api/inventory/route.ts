@@ -31,9 +31,9 @@ export const POST = async (request: NextRequest) => {
       return new NextResponse("Not Authorized", { status: 401 });
     }
 
-    const { productName, category, totalStock, price, color } = body;
+    const { productName, category, totalStock, size, price, color } = body;
 
-    if (!productName || !category || !totalStock || !price || !color) {
+    if (!productName || !category || !totalStock || !size || !price || !color) {
       return new NextResponse("Missing Data", { status: 400 });
     }
 
@@ -43,6 +43,7 @@ export const POST = async (request: NextRequest) => {
         category,
         totalStock,
         stockAvailable: totalStock,
+        size: Number(size),
         price,
         color,
       },

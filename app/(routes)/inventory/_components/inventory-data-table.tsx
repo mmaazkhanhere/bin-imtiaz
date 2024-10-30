@@ -21,6 +21,8 @@ const InventoryDataTable = () => {
     fetchInventory();
   }, []);
 
+  console.log(inventoryData);
+
   return (
     <div>
       <DataTable columns={columns} data={inventoryData} />

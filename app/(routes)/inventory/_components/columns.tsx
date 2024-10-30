@@ -6,9 +6,14 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
-import { Inventory } from "@prisma/client";
+import { Inventory, InventorySize } from "@prisma/client";
+import { formatDate } from "@/helpers/formatDate";
 
-export const columns: ColumnDef<Inventory>[] = [
+type InventoryColumns = Inventory & {
+  sizes: InventorySize[];
+};
+
+export const columns: ColumnDef<InventoryColumns>[] = [
   {
     accessorKey: "productName",
     header: ({ column }) => {
@@ -44,28 +49,55 @@ export const columns: ColumnDef<Inventory>[] = [
     },
   },
   {
-    accessorKey: "totalStock",
-    header: "Total Stock",
-  },
-  {
-    accessorKey: "stockAvailable",
-    header: ({ column }) => {
+    id: "sizes",
+    header: "Sizes (cm)",
+    cell: ({ row }) => {
+      const sizes = row.original.sizes;
       return (
-        <Button
-          aria-label="stock available column button"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Stock Available
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div>
+          {sizes.map((size: InventorySize) => (
+            <div key={size.id} className="py-1">
+              <span>{size.size}</span>
+            </div>
+          ))}
+        </div>
       );
     },
-    cell: ({ row }) => {
-      const stock = row.getValue<number>("stockAvailable");
-      return <div className="lg:pl-8">{stock}</div>;
-    },
   },
+  ...[
+    {
+      id: "totalStock",
+      header: "Total Stock",
+      cell: ({ row }: any) => {
+        const sizes = row.original.sizes;
+        return (
+          <div>
+            {sizes.map((size: InventorySize) => (
+              <div key={size.id} className="py-1">
+                {size.stock}
+              </div>
+            ))}
+          </div>
+        );
+      },
+    },
+    {
+      id: "availableStock",
+      header: "Available Stock",
+      cell: ({ row }: any) => {
+        const sizes = row.original.sizes;
+        return (
+          <div>
+            {sizes.map((size: InventorySize) => (
+              <div key={size.id} className="py-1">
+                {size.stockAvailable}
+              </div>
+            ))}
+          </div>
+        );
+      },
+    },
+  ],
   {
     accessorKey: "category",
     header: "Category",
@@ -73,5 +105,24 @@ export const columns: ColumnDef<Inventory>[] = [
   {
     accessorKey: "color",
     header: "Color",
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          aria-label="created at column button"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const date = row.getValue<string>("createdAt");
+      return <div>{formatDate(date)}</div>;
+    },
   },
 ];

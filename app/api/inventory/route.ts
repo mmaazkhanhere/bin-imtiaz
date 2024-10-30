@@ -13,7 +13,11 @@ export const GET = async () => {
       return new NextResponse("Not Authorized", { status: 401 });
     }
 
-    const inventory = await prismadb.inventory.findMany();
+    const inventory = await prismadb.inventory.findMany({
+      include: {
+        sizes: true,
+      },
+    });
 
     return NextResponse.json(inventory);
   } catch (error) {

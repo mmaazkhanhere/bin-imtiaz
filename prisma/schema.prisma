@@ -20,18 +20,25 @@ model User{
   createdAt DateTime @default(now())
 }
 
-model Inventory{
+model Inventory {
   id String @id @default(uuid())
   productName String
   category String
-  totalStock Int
-  stockAvailable Int
-  size Int
-  price Float
   color String
+  price Float
+  sizes InventorySize[]
   sales Sales[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model InventorySize {
+  id String @id @default(uuid())
+  size Int
+  stockAvailable Int
+  stock Int
+  inventory Inventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  inventoryId String
 }
 
 model Sales {
@@ -59,3 +66,4 @@ model MonthlyMetrics {
 
   @@unique([month])
 }
+

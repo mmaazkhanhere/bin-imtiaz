@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { isAdmin } from "@/helpers/user-check";
+import { InventorySize } from "@prisma/client";
 
 export const GET = async () => {
   const user = auth();
@@ -31,9 +32,16 @@ export const POST = async (request: NextRequest) => {
       return new NextResponse("Not Authorized", { status: 401 });
     }
 
-    const { productName, category, totalStock, size, price, color } = body;
+    const { productName, category, price, color, sizes } = body;
 
-    if (!productName || !category || !totalStock || !size || !price || !color) {
+    if (
+      !productName ||
+      !category ||
+      !price ||
+      !color ||
+      !sizes ||
+      !sizes.length
+    ) {
       return new NextResponse("Missing Data", { status: 400 });
     }
 
@@ -41,15 +49,21 @@ export const POST = async (request: NextRequest) => {
       data: {
         productName,
         category,
-        totalStock,
-        stockAvailable: totalStock,
-        size: Number(size),
         price,
         color,
       },
     });
 
-    return NextResponse.json(inventory);
+    const sizeData = sizes.map((size: InventorySize) => ({
+      size: size.size,
+      stock: size.stock,
+      stockAvailable: size.stock,
+      inventoryId: inventory.id,
+    }));
+
+    await prismadb.inventorySize.createMany({ data: sizeData });
+
+    return NextResponse.json({ ...inventory, sizes: sizeData });
   } catch (error) {
     console.log("[INVENTORY_POST]", error);
     return new NextResponse("Internal Server Error", { status: 500 });

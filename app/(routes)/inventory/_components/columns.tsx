@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
-import { Inventory, InventorySize } from "@prisma/client";
+import { InventorySize } from "@prisma/client";
 import { formatDate } from "@/helpers/formatDate";
 
 type InventoryColumns = {

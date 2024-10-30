@@ -57,9 +57,7 @@ const AddSalesForm = () => {
   const { toast } = useToast();
   const [inventories, setInventories] = useState<IInventoryItem[]>([]);
   const [sizes, setSizes] = useState<InventorySize[]>([]);
-  const [selectedInventoryId, setSelectedInventoryId] = useState<string | null>(
-    null
-  );
+  const [, setSelectedInventoryId] = useState<string | null>(null);
 
   const { isSubmitting, isValid } = form.formState;
 

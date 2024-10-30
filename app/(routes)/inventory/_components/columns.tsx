@@ -9,8 +9,15 @@ import { ArrowUpDown } from "lucide-react";
 import { Inventory, InventorySize } from "@prisma/client";
 import { formatDate } from "@/helpers/formatDate";
 
-type InventoryColumns = Inventory & {
-  sizes: InventorySize[];
+type InventoryColumns = {
+  id: string;
+  productName: string;
+  category: string;
+  color: string;
+  price: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sizes?: InventorySize[]; // Add this property specifically for size-related columns
 };
 
 export const columns: ColumnDef<InventoryColumns>[] = [
@@ -55,7 +62,7 @@ export const columns: ColumnDef<InventoryColumns>[] = [
       const sizes = row.original.sizes;
       return (
         <div>
-          {sizes.map((size: InventorySize) => (
+          {sizes?.map((size: InventorySize) => (
             <div key={size.id} className="py-1">
               <span>{size.size}</span>
             </div>

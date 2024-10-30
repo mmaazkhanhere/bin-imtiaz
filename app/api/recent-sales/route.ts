@@ -21,6 +21,7 @@ export const GET = async () => {
         id: true,
         productName: true,
         price: true,
+        quantity: true,
         seller: true,
       },
     });

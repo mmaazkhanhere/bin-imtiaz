@@ -131,7 +131,8 @@ const AddInventoryForm = () => {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="Bukram">Bukram</SelectItem>
-                      <SelectItem value="Fleese">Fleese</SelectItem>
+                      <SelectItem value="Half Fleese">Half Fleese</SelectItem>
+                      <SelectItem value="Full Fleese">Full Fleese</SelectItem>
                       <SelectItem value="2 in 1">2 in 1</SelectItem>
                     </SelectContent>
                   </Select>

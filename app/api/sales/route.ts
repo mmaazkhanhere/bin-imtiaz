@@ -35,19 +35,19 @@ export const POST = async (request: NextRequest) => {
       return new NextResponse("Not Authorized", { status: 401 });
     }
 
-    const { inventoryId, quantity, price, seller, color } = body;
+    const { inventoryId, quantity, price, seller, color, sizeId } = body;
 
     if (
       !inventoryId ||
       typeof quantity !== "number" ||
       typeof price !== "number" ||
       !seller ||
-      !color
+      !color ||
+      !sizeId
     ) {
       return new NextResponse("Missing or Invalid Data", { status: 400 });
     }
 
-    // Fetch the inventory item to get the cost
     const inventoryItem = await prismadb.inventory.findUnique({
       where: { id: inventoryId },
     });
@@ -56,18 +56,23 @@ export const POST = async (request: NextRequest) => {
       return new NextResponse("Inventory item not found", { status: 404 });
     }
 
-    if (quantity > inventoryItem.stockAvailable) {
-      return new NextResponse("Not enough stock available", { status: 405 });
+    const inventorySize = await prismadb.inventorySize.findUnique({
+      where: { id: sizeId },
+    });
+
+    if (!inventorySize || quantity > inventorySize.stockAvailable) {
+      return new NextResponse("Not enough stock available for this size", {
+        status: 405,
+      });
     }
 
-    // Calculate profit
     const profit = (price - inventoryItem.price) * quantity;
 
-    // Create the sale
     const sale = await prismadb.sales.create({
       data: {
         productName: inventoryItem.productName,
         category: inventoryItem.category,
+        size: inventorySize.size,
         quantity,
         price,
         seller,
@@ -77,23 +82,20 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
-    await prismadb.inventory.update({
-      where: { id: inventoryId },
+    await prismadb.inventorySize.update({
+      where: { id: sizeId },
       data: {
-        stockAvailable: inventoryItem.stockAvailable - quantity,
+        stockAvailable: inventorySize.stockAvailable - quantity,
       },
     });
 
-    // Determine the current month in 'YYYY-MM' format
-    const currentMonth = new Date().toISOString().slice(0, 7); // e.g., '2024-05'
+    const currentMonth = new Date().toISOString().slice(0, 7);
 
-    // Update MonthlyMetrics
     const existingMetrics = await prismadb.monthlyMetrics.findUnique({
       where: { month: currentMonth },
     });
 
     if (existingMetrics) {
-      // Update existing metrics
       await prismadb.monthlyMetrics.update({
         where: { month: currentMonth },
         data: {
@@ -103,7 +105,6 @@ export const POST = async (request: NextRequest) => {
         },
       });
     } else {
-      // Create new metrics for the current month
       await prismadb.monthlyMetrics.create({
         data: {
           month: currentMonth,

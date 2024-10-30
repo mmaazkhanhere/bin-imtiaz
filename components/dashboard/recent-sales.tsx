@@ -57,7 +57,7 @@ const RecentSales = () => {
                   <p className="font-medium">{sale.productName}</p>
                   <p className="text-xs text-gray-600">{sale.seller}</p>
                 </div>
-                <p className="font-bold">+Rs{sale.price}</p>
+                <p className="font-bold">+Rs{sale.price * sale.quantity}</p>
               </article>
             ))}
           </div>

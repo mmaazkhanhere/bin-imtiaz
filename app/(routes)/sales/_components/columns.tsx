@@ -46,6 +46,10 @@ export const columns: ColumnDef<Sales>[] = [
     header: "Profit",
   },
   {
+    accessorKey: "size",
+    header: "Size",
+  },
+  {
     accessorKey: "quantity",
     header: ({ column }) => {
       return (

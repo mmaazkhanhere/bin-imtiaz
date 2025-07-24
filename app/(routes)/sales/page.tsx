@@ -23,6 +23,7 @@ const SalesDetail = () => {
       <h1 className="text-3xl font-semibold py-16 text-center">
         Sales Details
       </h1>
+
       <SalesDataTable />
     </div>
   );

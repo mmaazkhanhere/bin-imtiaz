@@ -222,12 +222,12 @@ const AddSalesForm = () => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Unit Price</FormLabel>
+                  <FormLabel>Price Sold</FormLabel>
                   <FormControl>
-                    <Input type="number" step="1" min={400} {...field} />
+                    <Input type="number" step="1" min={0} {...field} />
                   </FormControl>
                   <FormDescription>
-                    What is the price of one product
+                    For what price did you sold it
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

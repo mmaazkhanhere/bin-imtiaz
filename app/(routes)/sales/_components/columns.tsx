@@ -9,8 +9,10 @@ import { Sales } from "@prisma/client";
 
 import { ArrowUpDown } from "lucide-react";
 import { formatDate } from "@/helpers/formatDate";
+import EditSales from "@/components/edit-sales";
+import DeleteSales from "@/components/delete-sales";
 
-export const columns: ColumnDef<Sales>[] = [
+export const columns = (refreshSales: () => void): ColumnDef<Sales>[] => [
   {
     accessorKey: "productName",
     header: ({ column }) => {
@@ -35,7 +37,7 @@ export const columns: ColumnDef<Sales>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Price
+          Price Sold
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -109,6 +111,28 @@ export const columns: ColumnDef<Sales>[] = [
     cell: ({ row }) => {
       const date = row.getValue<string>("date");
       return <div>{formatDate(date)}</div>;
+    },
+  },
+  {
+    id: "actionButtons",
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-4">
+          <EditSales
+          // inventoryId={row.original.id}
+          // onEditSuccess={refreshData}
+          // initialData={row.original as any}
+          />
+          <DeleteSales
+            saleId={row.original.id}
+            onDeleteSuccess={refreshSales}
+
+            // inventoryId={row.original.id}
+            // onDeleteSuccess={refreshData}
+          />
+        </div>
+      );
     },
   },
 ];

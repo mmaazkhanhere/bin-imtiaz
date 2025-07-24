@@ -213,7 +213,7 @@ const AddInventoryForm = () => {
                 <FormItem>
                   <FormLabel>Unit Price</FormLabel>
                   <FormControl>
-                    <Input type="number" step="1" min={400} {...field} />
+                    <Input type="number" step="1" min={0} {...field} />
                   </FormControl>
                   <FormDescription>
                     What is the price of one cap

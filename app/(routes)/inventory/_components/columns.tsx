@@ -8,6 +8,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { InventorySize } from "@prisma/client";
 import { formatDate } from "@/helpers/formatDate";
+import EditInventory from "@/components/edit-inventory";
+import DeleteInventory from "@/components/delete-inventory";
 
 type InventoryColumns = {
   id: string;
@@ -130,6 +132,18 @@ export const columns: ColumnDef<InventoryColumns>[] = [
     cell: ({ row }) => {
       const date = row.getValue<string>("createdAt");
       return <div>{formatDate(date)}</div>;
+    },
+  },
+  {
+    id: "actionButtons",
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-4">
+          <EditInventory />
+          <DeleteInventory />
+        </div>
+      );
     },
   },
 ];

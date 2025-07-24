@@ -142,7 +142,11 @@ export const columns = (
     cell: ({ row }) => {
       return (
         <div className="flex gap-4">
-          <EditInventory />
+          <EditInventory
+            inventoryId={row.original.id}
+            onEditSuccess={refreshData}
+            initialData={row.original as any}
+          />
           <DeleteInventory
             inventoryId={row.original.id}
             onDeleteSuccess={refreshData}

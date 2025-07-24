@@ -22,7 +22,9 @@ type InventoryColumns = {
   sizes?: InventorySize[]; // Add this property specifically for size-related columns
 };
 
-export const columns: ColumnDef<InventoryColumns>[] = [
+export const columns = (
+  refreshData: () => void
+): ColumnDef<InventoryColumns>[] => [
   {
     accessorKey: "productName",
     header: ({ column }) => {
@@ -141,7 +143,10 @@ export const columns: ColumnDef<InventoryColumns>[] = [
       return (
         <div className="flex gap-4">
           <EditInventory />
-          <DeleteInventory />
+          <DeleteInventory
+            inventoryId={row.original.id}
+            onDeleteSuccess={refreshData}
+          />
         </div>
       );
     },

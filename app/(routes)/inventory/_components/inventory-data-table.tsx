@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Inventory } from "@prisma/client";
 import { DataTable } from "./data-table";
@@ -10,22 +10,28 @@ const InventoryDataTable = () => {
   const [inventoryData, setInventoryData] = useState<Inventory[]>([]);
   const [, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchInventory = async () => {
-      setIsLoading(true);
+  const fetchInventory = useCallback(async () => {
+    setIsLoading(true);
+    try {
       const response = await fetch("/api/inventory");
       const data = await response.json();
       setInventoryData(data);
+    } catch (error) {
+      console.error("Error fetching inventory:", error);
+    } finally {
       setIsLoading(false);
-    };
-    fetchInventory();
+    }
   }, []);
+
+  useEffect(() => {
+    fetchInventory();
+  }, [fetchInventory]);
 
   console.log(inventoryData);
 
   return (
     <div>
-      <DataTable columns={columns} data={inventoryData} />
+      <DataTable columns={columns(fetchInventory)} data={inventoryData} />
     </div>
   );
 };

@@ -120,9 +120,12 @@ export const columns = (refreshSales: () => void): ColumnDef<Sales>[] => [
       return (
         <div className="flex gap-4">
           <EditSales
-          // inventoryId={row.original.id}
-          // onEditSuccess={refreshData}
-          // initialData={row.original as any}
+            saleId={row.original.id}
+            sale={row.original as any}
+            onEditSuccess={refreshSales}
+            // inventoryId={row.original.id}
+            // onEditSuccess={refreshData}
+            // initialData={row.original as any}
           />
           <DeleteSales
             saleId={row.original.id}

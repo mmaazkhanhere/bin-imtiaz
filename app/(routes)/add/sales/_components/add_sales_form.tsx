@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IInventoryItem } from "@/types/interface";
 import { InventorySize } from "@prisma/client";
@@ -54,7 +54,6 @@ const AddSalesForm = () => {
   });
 
   const [loading, setLoading] = useState<boolean>(true);
-  const { toast } = useToast();
   const [inventories, setInventories] = useState<IInventoryItem[]>([]);
   const [sizes, setSizes] = useState<InventorySize[]>([]);
   const [, setSelectedInventoryId] = useState<string | null>(null);
@@ -92,21 +91,13 @@ const AddSalesForm = () => {
 
       if (response.status === 200) {
         form.reset(); // Reset form fields
-        toast({
-          title: "Sale added successfully",
-        });
+        toast("Sale added successfully");
       } else {
-        toast({
-          title: "Something went wrong",
-          variant: "destructive",
-        });
+        toast("Something went wrong");
       }
     } catch (error) {
       console.error("Error adding sale:", error);
-      toast({
-        title: "Internal Server Error",
-        variant: "destructive",
-      });
+      toast("Internal Server Error");
     }
   }
 

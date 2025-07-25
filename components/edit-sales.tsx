@@ -42,7 +42,7 @@ interface EditSalesProps {
   onEditSuccess: () => void;
 }
 
-const EditSales = ({ saleId, sale, onEditSuccess }: EditSalesProps) => {
+const EditSales = ({ sale, onEditSuccess }: EditSalesProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [inventories, setInventories] = useState<IInventoryItem[]>([]);

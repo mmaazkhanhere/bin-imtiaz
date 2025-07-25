@@ -87,7 +87,7 @@ export async function PATCH(
 
         if (size.id) {
           // Find the current size object for this size.id
-          const currentSize = currentSizes.find((cs) => cs.id === size.id);
+          //const currentSize = currentSizes.find((cs) => cs.id === size.id);
           return prisma.inventorySize.update({
             where: { id: size.id },
             data: {

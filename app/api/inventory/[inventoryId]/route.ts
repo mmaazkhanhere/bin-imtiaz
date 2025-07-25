@@ -62,17 +62,6 @@ export async function PATCH(
 
     // Start a transaction
     const result = await prismadb.$transaction(async (prisma) => {
-      // 1. Update main inventory item
-      const updatedInventory = await prisma.inventory.update({
-        where: { id: inventoryId },
-        data: {
-          productName: body.productName,
-          category: body.category,
-          color: body.color,
-          price: parseFloat(body.price),
-        },
-      });
-
       // 2. Get current sizes
       const currentSizes = await prisma.inventorySize.findMany({
         where: { inventoryId },

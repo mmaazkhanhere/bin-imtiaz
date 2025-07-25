@@ -1,8 +1,8 @@
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
 import { Pencil } from "lucide-react";
 import { Button } from "./ui/button";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -13,9 +13,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-type Props = {};
+// type Props = {};
 
-const EditSales = (props: Props) => {
+const EditSales = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>

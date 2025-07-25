@@ -230,7 +230,7 @@ const EditInventory = ({
                   <div className="flex-1">
                     <FormField
                       control={form.control}
-                      name={`sizes.${index}.stock`} // Changed to stock
+                      name={`sizes.${index}.stockAvailable`} // Changed to stock
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className={index > 0 ? "sr-only" : ""}>

@@ -32,6 +32,7 @@ import { Inventory, InventorySize } from "@prisma/client";
 type SizeForm = {
   id?: string; // Include ID for existing sizes
   size: number;
+  stock: number;
   stockAvailable: number;
 };
 
@@ -67,6 +68,7 @@ const EditInventory = ({
         id: size.id, // Include existing ID
         size: size.size,
         stock: size.stock, // Use current stock instead of stockAvailable
+        stockAvailable: size.stockAvailable,
       })),
     },
   });
@@ -79,7 +81,8 @@ const EditInventory = ({
         sizes: values.sizes.map((size) => ({
           id: size.id,
           size: Number(size.size),
-          stockAvailable: Number(size.stockAvailable), // Changed from 'stock' to 'stockAvailable'
+          stock: Number(size.stock),
+          stockAvailable: Number(size.stockAvailable),
         })),
       });
 
@@ -98,7 +101,10 @@ const EditInventory = ({
 
   const addSizeField = () => {
     const sizes = form.getValues("sizes") || [];
-    form.setValue("sizes", [...sizes, { size: 0, stockAvailable: 0 }]);
+    form.setValue("sizes", [
+      ...sizes,
+      { size: 0, stock: 0, stockAvailable: 0 },
+    ]);
   };
 
   const removeSizeField = (index: number) => {
@@ -202,6 +208,30 @@ const EditInventory = ({
 
               {form.watch("sizes")?.map((_, index) => (
                 <div key={index} className="flex items-end gap-2 mt-2">
+                  <div className="flex-1">
+                    <FormField
+                      control={form.control}
+                      name={`sizes.${index}.stock`} // Changed to stock
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className={index > 0 ? "sr-only" : ""}>
+                            Current Stock
+                          </FormLabel>{" "}
+                          {/* Updated label */}
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="Current Stock"
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(parseInt(e.target.value) || 0)
+                              }
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   {/* Size input remains same */}
                   <div className="flex-1">
                     <FormField
@@ -223,30 +253,6 @@ const EditInventory = ({
                             />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <FormField
-                      control={form.control}
-                      name={`sizes.${index}.stockAvailable`} // Changed to stock
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className={index > 0 ? "sr-only" : ""}>
-                            Current Stock
-                          </FormLabel>{" "}
-                          {/* Updated label */}
-                          <FormControl>
-                            <Input
-                              type="number"
-                              placeholder="Current Stock"
-                              {...field}
-                              onChange={(e) =>
-                                field.onChange(parseInt(e.target.value) || 0)
-                              }
-                            />
-                          </FormControl>
                         </FormItem>
                       )}
                     />

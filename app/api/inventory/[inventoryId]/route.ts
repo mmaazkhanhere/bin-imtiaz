@@ -67,10 +67,21 @@ export async function PATCH(
         where: { inventoryId },
       });
 
+      await prisma.inventory.update({
+        where: { id: inventoryId },
+        data: {
+          productName: body.productName,
+          category: body.category,
+          color: body.color,
+          price: body.price,
+        },
+      });
+
       // 3. Prepare update operations
       const updateOperations = body.sizes.map((size: any) => {
         const data = {
           size: Number(size.size),
+          stock: Number(size.stock),
           stockAvailable: Number(size.stockAvailable), // Ensure this matches
         };
 
@@ -81,19 +92,14 @@ export async function PATCH(
             where: { id: size.id },
             data: {
               ...data,
-              // Maintain existing stock value
-              stock: {
-                increment:
-                  Number(size.stockAvailable) -
-                  (currentSize ? currentSize.stockAvailable : 0),
-              },
             },
           });
         } else {
           return prisma.inventorySize.create({
             data: {
               ...data,
-              stock: Number(size.stockAvailable), // Set initial stock
+              stock: Number(size.stock), // Set initial stock
+              stockAvailable: Number(size.stockAvailable),
               inventoryId,
             },
           });
